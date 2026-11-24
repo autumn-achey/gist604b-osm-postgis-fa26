@@ -17,49 +17,20 @@ import zipfile
 from pathlib import Path
 from typing import Optional
 
-# Function: Setup PostGIS + Load OSM Shapefile Data
 
 def setup_osm_postgis(
     osm_url: str,
-    db_name: str = "osm_db",
-    user: str = "postgres",
-    password: str = "postgres",
+    db_name: str,
+    user: str,
+    password: str,
     host: str = "localhost",
     port: int = 5432,
     data_dir: Optional[Path] = None,
-    load_shapefiles: Optional[list[str]] = None
-) -> None:
-    """
-    Create a PostGIS database and load Geofabrik shapefile data.
+    load_shapefiles: Optional[list] = None,
+):
+    """Download OSM shapefiles, create a PostGIS database, and load the data."""
 
-    This function performs a complete workflow:
-    - Connect to PostgreSQL
-    - Create a new database
-    - Enable PostGIS extension
-    - Download shapefile data from Geofabrik
-    - Unzip shapefile data
-    - Load shapefiles into PostGIS using shp2pgsql
-
-    Args:
-        osm_url: URL to Geofabrik shapefile ZIP
-        db_name: Name of the database to create
-        user: PostgreSQL username
-        password: PostgreSQL password
-        host: Database host
-        port: Database port
-        data_dir: Optional directory to store downloaded OSM data
-        load_shapefiles: Optional list of shapefile layer names to load
-
-    Returns:
-        None
-
-    Example:
-        >>> setup_osm_postgis(
-        ...     osm_url="https://download.geofabrik.de/north-america/us/arizona-latest-free.shp.zip", db_name="arizona", load_shapefiles=["places_a", "pois"]
-        ... )
-    """
-
- # Step 1: Setup data directory
+    # Step 1: Setup data directory
     if data_dir is None:
         data_dir = Path(f"../data/{db_name}")
     else:
